@@ -19,8 +19,12 @@ io.on("connection", (socket) => {
     io.emit("receiveMessage", message);
   });
 
-  socket.on("playSong", (songUrl) => {
-    io.emit("playSong", songUrl); // Broadcast song URL to all users
+  socket.on("playSong", (videoId) => {
+    io.emit("playSong", videoId); // Sync YouTube song
+  });
+
+  socket.on("togglePlayPause", (status) => {
+    io.emit("togglePlayPause", status); // Sync play/pause state
   });
 
   socket.on("disconnect", () => {
