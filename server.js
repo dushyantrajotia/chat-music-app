@@ -29,8 +29,8 @@ io.on("connection", (socket) => {
   socket.on("playSong", ({ id, title }) => {
     currentSong = { id, title };
     isPlaying = true;
-    io.emit("playSong", currentSong); // Broadcast to all users
-  });
+    io.emit("playSong", currentSong); // Broadcast song to all users
+  });  
 
   // Handle play/pause sync
   socket.on("togglePlayPause", (status) => {
@@ -39,9 +39,9 @@ io.on("connection", (socket) => {
   });
 
   // Handle chat messages
-  socket.on("sendMessage", (message) => {
-    io.emit("receiveMessage", message); // Broadcast message to all users
-  });
+  socket.on("sendMessage", ({ username, text }) => {
+    io.emit("receiveMessage", { username, text }); // Ensure everyone gets the message
+  });  
 
   // Handle typing indicator
   socket.on("userTyping", (isTyping) => {
