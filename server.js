@@ -14,6 +14,7 @@ const io = new Server(server, {
   },
 });
 
+// Global state for synchronization
 let currentSong = { id: "", title: "" };
 let isPlaying = false;
 
@@ -24,22 +25,22 @@ io.on("connection", (socket) => {
   socket.emit("playSong", currentSong);
   socket.emit("togglePlayPause", isPlaying);
 
-  // Handle song search and playback
+  // Handle song play request
   socket.on("playSong", ({ id, title }) => {
     currentSong = { id, title };
     isPlaying = true;
-    io.emit("playSong", currentSong);
+    io.emit("playSong", currentSong); // Broadcast to all users
   });
 
-  // Handle Play/Pause Sync
+  // Handle play/pause sync
   socket.on("togglePlayPause", (status) => {
     isPlaying = status;
-    io.emit("togglePlayPause", isPlaying);
+    io.emit("togglePlayPause", isPlaying); // Sync for all users
   });
 
   // Handle chat messages
   socket.on("sendMessage", (message) => {
-    io.emit("receiveMessage", message);
+    io.emit("receiveMessage", message); // Broadcast message to all users
   });
 
   // Handle typing indicator
